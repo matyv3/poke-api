@@ -2,6 +2,7 @@ import HttpException from "@core/Common/HttpException";
 import { Response } from "express";
 
 const errorHandler = (err: any, res: Response) => {
+	console.log(err)
 
 	if (err instanceof HttpException) {
 		return res

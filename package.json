@@ -4,7 +4,7 @@
   "description": "",
   "main": "buld/init.js",
   "scripts": {
-    "dev": "NODE_PATH=./src nodemon src/init.ts",
+    "dev": "nodemon -e ts --exec 'npm run build && ts-node src/init.ts' ",
     "start": "npm run build && node build/init.js",
     "build": "tsc -p ."
   },
