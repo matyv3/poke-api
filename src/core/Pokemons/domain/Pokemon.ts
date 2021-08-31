@@ -1,4 +1,7 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn} from "typeorm";
+import Rarities from "@core/Common/Rarities";
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn} from "typeorm";
+import Expansion from "./Expansion";
+import PokemonType from "./PokemonType";
 
 @Entity({ name: 'pokemons' })
 export default class Pokemon {
@@ -15,14 +18,19 @@ export default class Pokemon {
 	@Column({ type: 'tinyint' })
 	public firstEdition: boolean;
 
-	@Column({ type: 'varchar' })
-	public expansion: string;
+	@ManyToOne(type => Expansion)
+	@JoinColumn()
+	public expansion: Expansion;
 
-	@Column({ type: 'varchar' })
-	public type: string;
+	@ManyToOne(type => PokemonType)
+	@JoinColumn()
+	public type: PokemonType;
 
-	@Column({ type: 'varchar' })
-	public rarity: string;
+	@Column({ 
+		type: 'enum',
+		enum: Rarities
+	})
+	public rarity: Rarities;
 
 	@Column({ type: 'float' })
 	public price: number;
@@ -37,9 +45,9 @@ export default class Pokemon {
 		name: string,
 		hp: number,
 		firstEdition: boolean,
-		expansion: string,
-		type: string,
-		rarity: string,
+		expansion: Expansion,
+		type: PokemonType,
+		rarity: Rarities,
 		price: number,
 		image: string,
 	){

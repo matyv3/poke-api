@@ -1,7 +1,7 @@
-import Expansion from "@core/Pokemons/domain/Expansion";
+import HttpException from "@core/Common/HttpException";
+import Rarities from "@core/Common/Rarities";
 import IPokemonRepository from "@core/Pokemons/domain/IPokemonRepository";
 import Pokemon from "@core/Pokemons/domain/Pokemon";
-import PokemonType from "@core/Pokemons/domain/PokemonType";
 import { CreatePokemonDto } from "./CreatePokemonDto";
 
 export default class CreatePokemon {
@@ -13,25 +13,28 @@ export default class CreatePokemon {
 
 	public async run(data: CreatePokemonDto): Promise<Pokemon>{
 
-		// validate expansion, type, rarity
-		//const expansion = new Expansion('test')
-		//const type = new PokemonType('type')
+		if(!Object.values(Rarities).includes(data.rarity)){
+			throw new HttpException(400, "Invalid rarity")
+		}
+
+		const expansion = await this.repository.getExpansionById(data.expansionId)
+		if(!expansion) throw new HttpException(404, 'Expansion not found')
+
+		const pokemonType = await this.repository.getExpansionById(data.typeId)
+		if(!pokemonType) throw new HttpException(404, 'Pokemon type not found')
 
 		const pokemon = new Pokemon(
 			data.name,
 			data.hp,
 			data.firstEdition,
-			data.expansion,
-			data.type,
+			expansion,
+			pokemonType,
 			data.rarity,
 			data.price,
 			data.image
 		)
 
-		//await this.repository.create(pokemon)
-		console.log('pokemon: ', data)
-
-		return pokemon
+		return await this.repository.create(pokemon)
 	}
 
 }
