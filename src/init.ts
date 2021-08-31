@@ -7,6 +7,8 @@ import "@api/controllers";
 import Database from "@config/database";
 import { createConnection } from "typeorm";
 import errorHandler from "@api/utils/error-handler";
+import swaggerUi from "swagger-ui-express";
+import { specs } from "@config/swagger"
 
 const server = new InversifyExpressServer(container);
 server.setConfig(app => {
@@ -22,6 +24,7 @@ server.setConfig(app => {
 });
 
 const app = server.build();
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 const PORT = 3000
 
