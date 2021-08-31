@@ -6,6 +6,8 @@ import PokemonService from "@core/Pokemons/PokemonService";
 import { Request, Response } from "express";
 import { inject } from "inversify";
 import { BaseHttpController, controller, httpPost, response, request, httpGet, httpDelete, httpPut } from "inversify-express-utils";
+import { CreatePokemonValidation } from "@api/middlewares/pokemon-middlewares";
+import Validate from "@api/utils/request-validator";
 
 @controller("/pokemons")
 export class PokemonController extends BaseHttpController {
@@ -38,7 +40,7 @@ export class PokemonController extends BaseHttpController {
 	  }
   }
 
-  @httpPost('/')
+  @httpPost('/', ...CreatePokemonValidation, Validate)
   public async create(@request() req: Request, @response() res: Response){
 	  try{
 		  const data: CreatePokemonDto = {
