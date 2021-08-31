@@ -15,7 +15,7 @@ export default class Pokemon {
 	@Column({ type: 'int' })
 	public hp: number;
 
-	@Column({ type: 'tinyint' })
+	@Column({ type: 'boolean' })
 	public firstEdition: boolean;
 
 	@ManyToOne(type => Expansion)

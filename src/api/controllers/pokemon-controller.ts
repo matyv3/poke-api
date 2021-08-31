@@ -5,7 +5,7 @@ import { PokemonQuery } from "@core/Pokemons/domain/IPokemonRepository";
 import PokemonService from "@core/Pokemons/PokemonService";
 import { Request, Response } from "express";
 import { inject } from "inversify";
-import { BaseHttpController, controller, httpPost, response, request, httpGet } from "inversify-express-utils";
+import { BaseHttpController, controller, httpPost, response, request, httpGet, httpDelete, httpPut } from "inversify-express-utils";
 
 @controller("/pokemons")
 export class PokemonController extends BaseHttpController {
@@ -15,6 +15,28 @@ export class PokemonController extends BaseHttpController {
 	) {
 		super();
 	}
+
+  @httpGet('/')
+  public async find(@request() req: Request, @response() res: Response){
+	  try{
+		  const params: PokemonQuery = req.body
+		  const data = await this.pokemonService.find(params)
+		  return this.json({ data })
+	  }catch(err){
+		  return errorHandler(err, res)
+	  }
+  }
+
+  @httpGet('/:id')
+  public async findOne(@request() req: Request, @response() res: Response){
+	  try{
+		  const params: PokemonQuery = { id: parseInt(req.params.id) }
+		  const data = await this.pokemonService.find(params)
+		  return this.json({ data })
+	  }catch(err){
+		  return errorHandler(err, res)
+	  }
+  }
 
   @httpPost('/')
   public async create(@request() req: Request, @response() res: Response){
@@ -38,11 +60,24 @@ export class PokemonController extends BaseHttpController {
 	  }
   }
 
-  @httpGet('/')
-  public async find(@request() req: Request, @response() res: Response){
+  @httpPut('/:id')
+  public async update(@request() req: Request, @response() res: Response){
 	  try{
-		  const params: PokemonQuery = req.body
-		  const data = await this.pokemonService.find(params)
+		  const data: Partial<CreatePokemonDto> = {
+			  ...req.body
+		  }
+		  const result = await this.pokemonService.update(parseInt(req.params.id), data)
+		  return this.json({ data: result })
+	  }catch(err){
+		  return errorHandler(err, res)
+	  }
+  }
+
+
+  @httpDelete('/:id')
+  public async delete(@request() req: Request, @response() res: Response){
+	  try{
+		  const data = await this.pokemonService.delete(parseInt(req.params.id))
 		  return this.json({ data })
 	  }catch(err){
 		  return errorHandler(err, res)

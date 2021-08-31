@@ -3,6 +3,7 @@ import { inject, injectable } from "inversify";
 import CreatePokemon from "./application/CreatePokemon/CreatePokemon";
 import { CreatePokemonDto } from "./application/CreatePokemon/CreatePokemonDto";
 import GetPokemons from "./application/GetPokemons/GetPokemons";
+import UpdatePokemon from "./application/UpdatePokemon/UpdatePokemon";
 import Expansion from "./domain/Expansion";
 import IPokemonRepository, { PokemonQuery } from "./domain/IPokemonRepository";
 import Pokemon from "./domain/Pokemon";
@@ -19,8 +20,16 @@ export default class PokemonService {
 		return await new CreatePokemon(this.repository).run(data)
 	}
 
-	public async find(query?: PokemonQuery): Promise<{ data: Pokemon[], total: number }> {
+	public async find(query?: PokemonQuery): Promise<{ data: Pokemon[], total: number } | Pokemon> {
 		return await new GetPokemons(this.repository).run(query)
+	}
+	
+	public async update(id: number, data: Partial<CreatePokemonDto>): Promise<Pokemon> {
+		return new UpdatePokemon(this.repository).run(id, data)
+	}
+
+	public async delete(id: number): Promise<boolean> {
+		return await this.repository.delete(id)
 	}
 
 	public async getExpansions(): Promise<Expansion[]>{

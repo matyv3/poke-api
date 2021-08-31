@@ -19,7 +19,9 @@ export default class PokemonRepository implements IPokemonRepository {
 	}
 	
 	public async delete(id: number): Promise<boolean> {
-		throw new Error('method not implemented')
+		const repo = getRepository(Pokemon);
+		const result =  await repo.delete(id)
+		return result ? true : false
 	}
 
 	public async find(params?: PokemonQuery): Promise<{ data: Pokemon[], total: number }> {
@@ -35,6 +37,11 @@ export default class PokemonRepository implements IPokemonRepository {
 			data: result,
 			total
 		}
+	}
+
+	public async findOne(id: number): Promise<Pokemon|undefined> {
+		const repo = getRepository(Pokemon);
+		return await repo.findOne(id)
 	}
 
 	public async getExpansions(): Promise<Expansion[]> {
