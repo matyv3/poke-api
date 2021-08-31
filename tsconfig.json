@@ -1,8 +1,7 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "es6",
 		"module": "commonjs",
-		"lib": ["es6", "dom"],
 		"outDir": "./build",
 		"rootDir": "./src",
 		"strict": true,
@@ -10,13 +9,12 @@
 		"baseUrl": "src",
 		"paths": {
 			"@api/*": ["api/*"],
-			"@config/*": ["config/*"]
+			"@config/*": ["config/*"],
+			"@core/*": ["core/*"]
 		},
 		"types": ["reflect-metadata", "jest"],
 		"esModuleInterop": true,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"suppressImplicitAnyIndexErrors": true
+		"experimentalDecorators": true
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"]

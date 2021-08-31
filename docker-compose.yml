@@ -1,0 +1,49 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: pokeapi
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+    networks:
+      - backnet
+
+  backend:
+    image: pokeapi
+    build: 
+      context: ./
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    command: /usr/bin/docker-entrypoint.sh
+    volumes:
+      - ./:/app/
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      TYPEORM_CONNECTION: mysql
+      TYPEORM_HOST: mysql
+      TYPEORM_USERNAME: root
+      TYPEORM_PASSWORD: 1234
+      TYPEORM_DATABASE: pokeapi
+      TYPEORM_PORT: 3306
+      TYPEORM_LOGGING: 1
+      TYPEORM_ENTITIES: ./**/models/*.js
+      TYPEORM_SYNCHRONIZE: 1
+    depends_on:
+      - mysql
+    networks:
+      - backnet
+
+networks:
+  backnet:
+    driver: bridge
+
+
+

@@ -1,0 +1,8 @@
+
+FROM node:alpine 
+
+WORKDIR /app
+
+COPY ./docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/bin/docker-entrypoint.sh
