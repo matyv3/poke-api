@@ -8,6 +8,8 @@ import { inject } from "inversify";
 import { BaseHttpController, controller, httpPost, response, request, httpGet, httpDelete, httpPut } from "inversify-express-utils";
 import { CreatePokemonValidation } from "@api/middlewares/pokemon-middlewares";
 import Validate from "@api/utils/request-validator";
+import { uploadFile } from "@api/utils/file-uploader";
+import HttpException from "@core/Common/HttpException";
 
 @controller("/pokemons")
 export class PokemonController extends BaseHttpController {
@@ -61,13 +63,22 @@ export class PokemonController extends BaseHttpController {
    *            - common
    *            - not_common
    *            - rare
+   *       - name: image
+   *         in: formData
+   *         required: true
+   *         type: file
    *     responses:
    *       200:
    *         description: Pokemon
    */
-  @httpPost('/', ...CreatePokemonValidation, Validate)
+  @httpPost('/',
+			uploadFile.single('image'),
+			...CreatePokemonValidation, Validate
+		)
   public async create(@request() req: Request, @response() res: Response){
 	  try{
+		  if(!req.file) throw new HttpException(400, 'Image is required');
+		  const image = 'uploads/' + req.file.filename
 		  const data: CreatePokemonDto = {
 			  name: req.body.name,
 			  hp: req.body.hp,
@@ -76,9 +87,9 @@ export class PokemonController extends BaseHttpController {
 			  typeId: req.body.type_id,
 			  rarity: req.body.rarity,
 			  price: req.body.price,
-			  image: ''
+			  image
 		  }
-		  
+
 		  const result = await this.pokemonService.create(data)
 
 		  return this.json({ data: result }, 201)
@@ -96,6 +107,10 @@ export class PokemonController extends BaseHttpController {
    *     produces:
    *       - application/json
    *     parameters:
+   *       - name: id
+   *         in: path
+   *         type: integer
+   *         required: true
    *       - name: name
    *         in: formData
    *         type: string
@@ -124,15 +139,22 @@ export class PokemonController extends BaseHttpController {
    *            - common
    *            - not_common
    *            - rare
+   *       - name: image
+   *         in: formData
+   *         type: file
    *     responses:
    *       200:
    *         description: Updated Pokemon
    */
-  @httpPut('/:id')
+  @httpPut('/:id', uploadFile.single("image"))
   public async update(@request() req: Request, @response() res: Response){
 	  try{
+		  if(!req.params.id) throw new HttpException(400, 'ID es required')
 		  const data: Partial<CreatePokemonDto> = {
 			  ...req.body
+		  }
+		  if(req.file){
+			  data.image = 'uploads/' + req.file.filename
 		  }
 		  const result = await this.pokemonService.update(parseInt(req.params.id), data)
 		  return this.json({ data: result })

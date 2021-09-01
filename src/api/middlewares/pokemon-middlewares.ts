@@ -1,4 +1,4 @@
-import { check } from "express-validator";
+import { check, body } from "express-validator";
 
 export const CreatePokemonValidation = [
 	check('name').exists(),

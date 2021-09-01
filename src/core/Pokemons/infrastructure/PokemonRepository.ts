@@ -15,7 +15,12 @@ export default class PokemonRepository implements IPokemonRepository {
 	}
 
 	public async update(id: number, data: Partial<Pokemon>): Promise<Pokemon> {
-		throw new Error('method not implemented')
+		const repo = getRepository(Pokemon);
+		let update = { id };
+		Object.keys(data).forEach((key) => {
+			update[key] = data[key];
+		});
+		return await repo.save(update)
 	}
 	
 	public async delete(id: number): Promise<boolean> {
