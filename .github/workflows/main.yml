@@ -26,6 +26,7 @@ jobs:
         uses: actions/setup-node@v2
       - run: npm i
       - run: npm run build
+      - run: ls -la
       - run: npm run test
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
