@@ -17,12 +17,27 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
     steps:
-    - name: deploy
-      uses: fifsky/ssh-action@master
-      with:
-        command: |
-          whoami
+      - name: build
+        uses: actions/checkout@v2
+        with:
+          command: |
+            npm install
+            npm run build
+
+      - name: test
+        uses: actions/checkout@v2
+        with:
+          command: npm run test
+
+      - name: deploy
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            whoami
         host: ${{ secrets.HOST }}
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
