@@ -1,9 +1,14 @@
+import Rarities from "@core/Common/Rarities";
 import Expansion from "./Expansion";
 import Pokemon from "./Pokemon";
 import PokemonType from "./PokemonType";
 
 export type PokemonQuery = {
 	id?: number;
+	type_id?: number;
+	expansion_id?: number;
+	name?: string;
+	rarity?: Rarities;
 	limit?: number;
 	offset?: number;
 }

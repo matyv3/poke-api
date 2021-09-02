@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { FindManyOptions, getRepository } from "typeorm";
+import { FindManyOptions, getRepository, Like } from "typeorm";
 import Expansion from "../domain/Expansion";
 import IPokemonRepository, { PokemonQuery } from "../domain/IPokemonRepository";
 import Pokemon from "../domain/Pokemon";
@@ -32,10 +32,24 @@ export default class PokemonRepository implements IPokemonRepository {
 	public async find(params?: PokemonQuery): Promise<{ data: Pokemon[], total: number }> {
 		const repo = getRepository(Pokemon);
 
+		const where: any = {}
 		const query: FindManyOptions<Pokemon> = {
-			take: params && params.limit ? params.limit : 10
+			join: {
+				alias: "pokemons",
+				leftJoinAndSelect: {
+					type: "pokemons.type",
+					expansion: "pokemons.expansion",
+				}
+			},
+			take: params && params.limit ? params.limit : 10,
 		};
-		if(params && params.offset) query.skip = params.offset;
+
+		if(params?.offset) query.skip = params.offset;
+		if(params?.rarity) where.rarity = params.rarity
+		if(params?.expansion_id) where.expansion = params.expansion_id
+		if(params?.type_id) where.type = params.type_id
+		if(params?.name) where.name = Like(`%${params.name}%`)
+		query.where = where
 
 		const [result, total] = await repo.findAndCount(query)
 		return {
@@ -46,7 +60,15 @@ export default class PokemonRepository implements IPokemonRepository {
 
 	public async findOne(id: number): Promise<Pokemon|undefined> {
 		const repo = getRepository(Pokemon);
-		return await repo.findOne(id)
+		return await repo.findOne(id, {
+			join: {
+				alias: "pokemons",
+				leftJoinAndSelect: {
+					type: "pokemons.type",
+					expansion: "pokemons.expansion",
+				}
+			},
+		})
 	}
 
 	public async getExpansions(): Promise<Expansion[]> {

@@ -254,7 +254,23 @@ export class PokemonController extends BaseHttpController {
    *     parameters:
    *       - name: id
    *         in: path
+   *         type: integer
+   *       - name: name
+   *         in: query
    *         type: string
+   *       - name: type_id
+   *         in: query
+   *         type: integer
+   *       - name: expansion_id
+   *         in: query
+   *         type: integer
+   *       - name: rarity
+   *         in: query
+   *         type: string
+   *         enum:
+   *            - common
+   *            - not_common
+   *            - rare
    *       - name: limit
    *         in: query
    *         type: string
