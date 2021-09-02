@@ -41,11 +41,12 @@ jobs:
     steps:
     - name: Upload
       uses: actions/upload-artifact@v2
+      with:
+        name: build
     - run: rsync -avz build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi/
     - name: Restart application
       uses: fifsky/ssh-action@master
       with:
-        name: build
         command: |
           ls -la /opt/pokeapi
         host: ${{ secrets.HOST }}
