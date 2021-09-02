@@ -10,6 +10,7 @@ import errorHandler from "@api/utils/error-handler";
 import swaggerUi from "swagger-ui-express";
 import { specs } from "@config/swagger"
 import path from "path";
+import { PORT } from "@config/environment";
 
 const server = new InversifyExpressServer(container);
 server.setConfig(app => {
@@ -29,8 +30,6 @@ server.setConfig(app => {
 const app = server.build();
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.get("/", (req: Request, res: Response) => res.json({ status: 'Pokemon REST API runing ok' }))
-
-const PORT = 3000
 
 const start = async () => {
 	try {
