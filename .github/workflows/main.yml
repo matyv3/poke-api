@@ -24,7 +24,7 @@ jobs:
         command: |
           whoami
         host: ${{ secrets.HOST }}
-        user: ${{ secrets.KEY }}
+        user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         
 
