@@ -39,12 +39,15 @@ jobs:
     needs: build_and_test
     runs-on: ubuntu-latest
     steps:
-    - name: deploy
+    - name: Upload
+      uses: actions/upload-artifact@v2
+    - run: rsync -avz build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi/
+    - name: Restart application
       uses: fifsky/ssh-action@master
       with:
         name: build
         command: |
-          rsync -avz build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi/
+          ls -la /opt/pokeapi
         host: ${{ secrets.HOST }}
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
