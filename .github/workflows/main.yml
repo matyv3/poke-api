@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: build
+          path: poke-api/build
         
   deploy:
     name: Deploy
@@ -48,7 +48,7 @@ jobs:
         echo "${{ secrets.KEY }}" > ~/.ssh/gh_actions_key
         chmod 600 ~/.ssh/gh_actions_key
         ls -la
-        rsync -avz -e "ssh -i ~/.ssh/gh_actions_key -o StrictHostKeyChecking=no" ./build ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi
+        rsync -avz -e "ssh -i ~/.ssh/gh_actions_key -o StrictHostKeyChecking=no" ./ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi
     - name: Restart application
       uses: fifsky/ssh-action@master
       with:
