@@ -1,3 +1,4 @@
+import * as bcrypt from "bcryptjs";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'users' })
@@ -13,15 +14,22 @@ export default class User {
 	public name: string;
 
 	@Column({ type: 'varchar' })
-	private password: string;
+	private password!: string;
 
 	constructor(
 		email: string,
 		name: string,
-		password: string
 	){
 		this.email = email
 		this.name = name
-		this.password = password // TODO decode / encode
+	}
+
+	public async setPassword(password: string){
+		const salt = await bcrypt.genSalt(10);
+		this.password = await bcrypt.hash(password, salt);
+	}
+
+	public async comparePassword(password: string): Promise<boolean> {
+		return await bcrypt.compare(password, this.password);
 	}
 }
