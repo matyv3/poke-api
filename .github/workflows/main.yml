@@ -43,6 +43,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: build
+        path: build
     - run: rsync -avz build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi/
     - name: Restart application
       uses: fifsky/ssh-action@master
