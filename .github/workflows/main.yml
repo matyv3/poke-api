@@ -40,11 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: deploy
-      uses: fifsky/ssh-action@master
+      uses: fifsky/ssh-action@master,actions/upload-artifact@v2
       with:
         name: build
         command: |
-          whoami
+          rsync -avz build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi/
         host: ${{ secrets.HOST }}
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
