@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: deploy
-      uses: fifsky/ssh-action@master,actions/upload-artifact@v2
+      uses: fifsky/ssh-action@master
       with:
         name: build
         command: |
