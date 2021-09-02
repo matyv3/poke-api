@@ -48,7 +48,7 @@ jobs:
         mkdir ~/.ssh
         echo "${{ secrets.KEY }}" > ~/.ssh/gh_actions_key
         chmod 600 ~/.ssh/gh_actions_key
-        rsync -avz -i ~/.ssh/gh_actions_key -o StrictHostKeyChecking=no" build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi
+        rsync -avz -e "ssh -i ~/.ssh/gh_actions_key -o StrictHostKeyChecking=no" build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi
     - name: Restart application
       uses: fifsky/ssh-action@master
       with:
