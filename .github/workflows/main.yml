@@ -26,7 +26,6 @@ jobs:
         uses: actions/setup-node@v2
       - run: npm i
       - run: npm run build
-      - run: ls -la
       - run: npm run test
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
@@ -49,7 +48,8 @@ jobs:
         mkdir ~/.ssh
         echo "${{ secrets.KEY }}" > ~/.ssh/gh_actions_key
         chmod 600 ~/.ssh/gh_actions_key
-        rsync -avz -e "ssh -i ~/.ssh/gh_actions_key -o StrictHostKeyChecking=no" ./ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi
+        ls -la
+        rsync -avz -e "ssh -i ~/.ssh/gh_actions_key -o StrictHostKeyChecking=no" ./build ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi
     - name: Restart application
       uses: fifsky/ssh-action@master
       with:
