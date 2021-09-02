@@ -36,6 +36,7 @@ jobs:
         
   deploy:
     name: Deploy
+    needs: build_and_test
     runs-on: ubuntu-latest
     steps:
     - name: deploy
