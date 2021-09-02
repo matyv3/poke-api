@@ -43,15 +43,12 @@ jobs:
       with:
         name: build
     - name: Upload
-      uses: burnett01/rsync-deployments@5.1
-      with:
-        name: build
-        switches: -avzr --delete
-        path: build
-        remote_path: /opt/pokeapi
-        remote_host: ${{ secrets.HOST }}
-        remote_user: ${{ secrets.USERNAME }}
-        remote_key: ${{ secrets.KEY }}
+      uses: actions/checkout@v2
+    - run: |
+        mkdir ~/.ssh
+        echo "${{ secrets.KEY }}" > ~/.ssh/gh_actions_key
+        chmod 600 ~/.ssh/gh_actions_k
+        rsync -avz -i ~/.ssh/gh_actions_key -o StrictHostKeyChecking=no" build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi
     - name: Restart application
       uses: fifsky/ssh-action@master
       with:
