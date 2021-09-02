@@ -2,6 +2,7 @@ import TYPES from "@config/types";
 import { inject, injectable } from "inversify";
 import CreatePokemon from "./application/CreatePokemon/CreatePokemon";
 import { CreatePokemonDto } from "./application/CreatePokemon/CreatePokemonDto";
+import DeletePokemon from "./application/DeletePokemon/DeletePokemon";
 import GetPokemons from "./application/GetPokemons/GetPokemons";
 import UpdatePokemon from "./application/UpdatePokemon/UpdatePokemon";
 import Expansion from "./domain/Expansion";
@@ -29,7 +30,7 @@ export default class PokemonService {
 	}
 
 	public async delete(id: number): Promise<boolean> {
-		return await this.repository.delete(id)
+		return await new DeletePokemon(this.repository).run(id)
 	}
 
 	public async getExpansions(): Promise<Expansion[]>{

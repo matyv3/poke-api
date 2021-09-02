@@ -4,6 +4,7 @@ import User from "@core/Users/domain/User";
 import { AuthenticateDto } from "./AuthenticateDto";
 import { AuthResponseDto } from "./AuthResponseDto";
 import * as jwt from 'jsonwebtoken'
+import { JWT_SECRET } from "@config/environment";
 
 export default class Authenticate {
 
@@ -30,6 +31,6 @@ export default class Authenticate {
 	}
 
 	public getAuthToken(user: User): string{
-		return jwt.sign({ id: user.id, email: user.email }, 'JWT_$ecr3t');
+		return jwt.sign({ id: user.id, email: user.email }, JWT_SECRET);
 	}
 }

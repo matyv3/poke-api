@@ -10,6 +10,7 @@ import { CreatePokemonValidation } from "@api/middlewares/pokemon-middlewares";
 import Validate from "@api/utils/request-validator";
 import { uploadFile } from "@api/utils/file-uploader";
 import HttpException from "@core/Common/HttpException";
+import Authorize from "@api/middlewares/auth-middleware";
 
 @controller("/pokemons")
 export class PokemonController extends BaseHttpController {
@@ -26,6 +27,8 @@ export class PokemonController extends BaseHttpController {
    *   post:
    *     description: Create Pokemon
    *     tags: [Pokemons]
+   *     security:
+   *       - Bearer: []
    *     produces:
    *       - application/json
    *     parameters:
@@ -72,6 +75,7 @@ export class PokemonController extends BaseHttpController {
    *         description: Pokemon
    */
   @httpPost('/',
+			Authorize(),
 			uploadFile.single('image'),
 			...CreatePokemonValidation, Validate
 		)
@@ -104,6 +108,8 @@ export class PokemonController extends BaseHttpController {
    *   put:
    *     description: Delete Pokemon
    *     tags: [Pokemons]
+   *     security:
+   *       - Bearer: []
    *     produces:
    *       - application/json
    *     parameters:
@@ -146,7 +152,7 @@ export class PokemonController extends BaseHttpController {
    *       200:
    *         description: Updated Pokemon
    */
-  @httpPut('/:id', uploadFile.single("image"))
+  @httpPut('/:id', Authorize(), uploadFile.single("image"))
   public async update(@request() req: Request, @response() res: Response){
 	  try{
 		  if(!req.params.id) throw new HttpException(400, 'ID es required')
@@ -169,14 +175,21 @@ export class PokemonController extends BaseHttpController {
    * /pokemons/{id}:
    *   delete:
    *     description: Delete Pokemon
+   *     security:
+   *       - Bearer: []
    *     tags: [Pokemons]
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         type: integer
+   *         required: true
    *     produces:
    *       - application/json
    *     responses:
    *       200:
    *         description: Operation boolean result
    */
-  @httpDelete('/:id')
+  @httpDelete('/:id', Authorize())
   public async delete(@request() req: Request, @response() res: Response){
 	  try{
 		  const data = await this.pokemonService.delete(parseInt(req.params.id))
