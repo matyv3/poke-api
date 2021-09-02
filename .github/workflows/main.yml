@@ -31,14 +31,17 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build
-          path: |
-            build
+          path: build
         
   deploy:
     name: Deploy
     needs: build_and_test
     runs-on: ubuntu-latest
     steps:
+    - name: Download build artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: build
     - name: Upload
       uses: burnett01/rsync-deployments@5.1
       with:
