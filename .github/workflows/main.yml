@@ -40,11 +40,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Upload
-      uses: actions/upload-artifact@v2
+      uses: burnett01/rsync-deployments@5.1
       with:
         name: build
+        switches: -avzr --delete
         path: build
-    - run: rsync -avz build/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/opt/pokeapi/
+        remote_path: /opt/pokeapi
+        remote_host: ${{ secrets.HOST }}
+        remote_user: ${{ secrets.USERNAME }}
+        remote_key: ${{ secrets.KEY }}
     - name: Restart application
       uses: fifsky/ssh-action@master
       with:
