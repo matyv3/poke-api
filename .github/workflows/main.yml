@@ -21,17 +21,12 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-      - name: build
-        uses: actions/checkout@v2
-        with:
-          command: |
-            npm install
-            npm run build
-
-      - name: test
-        uses: actions/checkout@v2
-        with:
-          command: npm run test
+      - uses: actions/checkout@v2
+      - name: Build and Test
+        uses: actions/setup-node@v2
+      - run: npm i
+      - run: npm run build
+      - run: npm run test
 
       - name: deploy
         uses: fifsky/ssh-action@master
