@@ -56,11 +56,13 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          echo "${{ secrets.ENVIRONMENT }}" > /opt/pokeapi/.env
-          ls -la /opt/pokeapi
+          cd /opt/pokeapi
+          echo "${{ secrets.ENVIRONMENT }}" > .env
+          ${{ secrets.NPM_PATH }} ci
+          ${{ secrets.PM2_PATH }} restart poke-api
         host: ${{ secrets.HOST }}
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
-        
+        args: "-tt -vvv"
 
 
