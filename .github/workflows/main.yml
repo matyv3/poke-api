@@ -58,8 +58,8 @@ jobs:
         command: |
           cd /opt/pokeapi
           echo "${{ secrets.ENVIRONMENT }}" > .env
-          npm ci
-          pm2 restart ecosystem.config.js
+          ${{ secrets.NPM_PATH }} ci
+          ${{ secrets.PM2_PATH }} restart ecosystem.config.js
         host: ${{ secrets.HOST }}
         user: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
