@@ -274,7 +274,7 @@ export class PokemonController extends BaseHttpController {
    *       - name: limit
    *         in: query
    *         type: string
-   *       - name: integer
+   *       - name: offset
    *         in: query
    *         type: integer
    *     responses:
