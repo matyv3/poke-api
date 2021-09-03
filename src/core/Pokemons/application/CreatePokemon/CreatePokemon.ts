@@ -20,7 +20,7 @@ export default class CreatePokemon {
 		const expansion = await this.repository.getExpansionById(data.expansionId)
 		if(!expansion) throw new HttpException(404, 'Expansion not found');
 
-		const pokemonType = await this.repository.getExpansionById(data.typeId)
+		const pokemonType = await this.repository.getTypeById(data.typeId)
 		if(!pokemonType) throw new HttpException(404, 'Pokemon type not found');
 
 		if(typeof data.firstEdition == 'string'){
