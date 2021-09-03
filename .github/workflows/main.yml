@@ -56,7 +56,7 @@ jobs:
       uses: fifsky/ssh-action@master
       with:
         command: |
-          cat "${{ secrets.ENVIRONMENT }}" > /opt/pokeapi/.env
+          echo "${{ secrets.ENVIRONMENT }}" > /opt/pokeapi/.env
           ls -la /opt/pokeapi
         host: ${{ secrets.HOST }}
         user: ${{ secrets.USERNAME }}
